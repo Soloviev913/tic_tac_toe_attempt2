@@ -13,53 +13,63 @@ int main()
 {
     setlocale(LC_ALL, "ru_RU.UTF-8");
     const int row = 3;
-    vector<string> arrVec;
-    vector<string> vecQueue;
-
-    string arr[row][row] = {{"%", "%", "%"},
-                            {"%", "%", "%"},
-                            {"%", "%", "%"}};
-    Output(&arr[0][0], row);
-
-    bool isRun = true;
-    int countMt = 0;
-
-    string *ptrArr = &arr[0][0];
-    const int COUNT = 9;
-    while (countMt < COUNT)
+    bool isRestart = true;
+    while (isRestart)
     {
-        string motion;
-        cout << "Введите символ и позицию от 1 до 9 \n";
-        cin >> motion;
-        string pos = motion.substr(motion.size() - 1);
-        if (vecQueue.empty() == false && motion.substr(0, 1) == vecQueue.back())
+        vector<string> arrVec;
+        vector<string> vecQueue;
+
+        string arr[row][row] = {{"%", "%", "%"},
+                                {"%", "%", "%"},
+                                {"%", "%", "%"}};
+        Output(&arr[0][0], row);
+
+        bool isRun = true;
+        int countMt = 0;
+
+        string *ptrArr = &arr[0][0];
+        const int COUNT = 9;
+        while (countMt < COUNT)
         {
-            cout << "Нельзя сходить 2 раза подряд \n";
-        }
-        else if (find(arrVec.begin(), arrVec.end(), pos) == arrVec.end() &&
-                 motion.substr(motion.size() - 1) != "0")
-        {
-            string symbol = motion.substr(0, 1);
-            vecQueue.push_back(symbol);
-            arrVec.push_back(pos);
-            ptrArr[stoi(pos) - 1] = symbol;
-            Output(ptrArr, row);
-            string win = CheckWin(arrVec, vecQueue);
-            if (win != "")
+            string motion;
+            cout << "Введите символ и позицию от 1 до 9 \n";
+            std::cin >> motion;
+            string pos = motion.substr(motion.size() - 1);
+            if (vecQueue.empty() == false && motion.substr(0, 1) == vecQueue.back())
             {
-                cout << "Победил игрок  " + win;
-                break;
+                cout << "Нельзя сходить 2 раза подряд \n";
             }
-            countMt++;
+            else if (find(arrVec.begin(), arrVec.end(), pos) == arrVec.end() &&
+                     motion.substr(motion.size() - 1) != "0")
+            {
+                string symbol = motion.substr(0, 1);
+                vecQueue.push_back(symbol);
+                arrVec.push_back(pos);
+                ptrArr[stoi(pos) - 1] = symbol;
+                Output(ptrArr, row);
+                string win = CheckWin(arrVec, vecQueue);
+                if (win != "")
+                {
+                    cout << "Победил игрок  " + win << endl;
+                    break;
+                }
+                countMt++;
+            }
+            else
+            {
+                cout << "Ошибка: введите символ и позицию от 1 до 9 \n";
+            }
         }
-        else
+        const int NINE = 9;
+        if (countMt == NINE)
         {
-            cout << "Ошибка: введите символ и позицию от 1 до 9 \n";
+            cout << "Ничья\n";
         }
-    }
-    const int NINE = 9;
-    if (countMt == NINE) {
-        cout << "Ничья";
+
+        cout << "Введите 1, чтобы начать заново, 0 - завершить игру" << endl;
+        int restart;
+        std::cin >> restart;
+        isRestart = (restart == 1) ? true : false;
     }
 }
 
@@ -100,13 +110,15 @@ string CheckWin(const vector<string> &arrVec, const vector<string> &vecQueue)
             const int THREE = 3;
             for (int j = 0; j < THREE; j++)
             {
-                if (underStr.find(ARR_WINS[i][j]) == string::npos) {
+                if (underStr.find(ARR_WINS[i][j]) == string::npos)
+                {
                     isWin = false;
                     break;
                 }
             }
 
-            if (isWin) {
+            if (isWin)
+            {
                 return vecQueue[iter];
             }
         }
