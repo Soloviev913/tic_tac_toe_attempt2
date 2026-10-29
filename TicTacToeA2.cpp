@@ -57,6 +57,10 @@ int main()
             cout << "Ошибка: введите символ и позицию от 1 до 9 \n";
         }
     }
+    const int NINE = 9;
+    if (countMt == NINE) {
+        cout << "Ничья";
+    }
 }
 
 void Output(const string *arr, int row)
@@ -93,7 +97,8 @@ string CheckWin(const vector<string> &arrVec, const vector<string> &vecQueue)
         {
             bool isWin = true;
 
-            for (int j = 0; j < 3; j++)
+            const int THREE = 3;
+            for (int j = 0; j < THREE; j++)
             {
                 if (underStr.find(ARR_WINS[i][j]) == string::npos) {
                     isWin = false;
