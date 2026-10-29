@@ -7,6 +7,7 @@
 using namespace std;
 
 void Output(const string *, int);
+string CheckWin(const vector<string> &, const vector<string> &);
 
 int main()
 {
@@ -19,6 +20,7 @@ int main()
                             {"%", "%", "%"},
                             {"%", "%", "%"}};
     Output(&arr[0][0], row);
+
     bool isRun = true;
     int countMt = 0;
 
@@ -42,6 +44,12 @@ int main()
             arrVec.push_back(pos);
             ptrArr[stoi(pos) - 1] = symbol;
             Output(ptrArr, row);
+            string win = CheckWin(arrVec, vecQueue);
+            if (win != "")
+            {
+                cout << "Победил игрок  " + win;
+                break;
+            }
             countMt++;
         }
         else
@@ -61,4 +69,43 @@ void Output(const string *arr, int row)
         }
         cout << "\n";
     }
+}
+
+string CheckWin(const vector<string> &arrVec, const vector<string> &vecQueue)
+{
+    const int WIN_COUNT = 8;
+    const string ARR_WINS[WIN_COUNT] = {"123", "456", "789", "147", "258", "369", "159", "357"};
+
+    int iter = 0;
+
+    while (iter != 2)
+    {
+        int i = iter;
+        string underStr = "";
+
+        while (i < arrVec.size())
+        {
+            underStr += arrVec[i];
+            i += 2;
+        }
+
+        for (int i = 0; i < WIN_COUNT; i++)
+        {
+            bool isWin = true;
+
+            for (int j = 0; j < 3; j++)
+            {
+                if (underStr.find(ARR_WINS[i][j]) == string::npos) {
+                    isWin = false;
+                    break;
+                }
+            }
+
+            if (isWin) {
+                return vecQueue[iter];
+            }
+        }
+        iter++;
+    }
+    return "";
 }
